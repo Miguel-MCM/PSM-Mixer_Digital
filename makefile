@@ -1,0 +1,30 @@
+# Makefile para compilar o código do tabuleiro de xadrez com raylib
+
+# Nome do arquivo executável
+EXECUTABLE = main
+
+# Compilador
+CC = g++
+
+# Flags de compilação
+CFLAGS = -std=c++11 -Wall
+
+# Flags do linker
+LDFLAGS = 
+
+# Arquivos fonte
+SOURCES = main.cpp filters.cpp
+
+# Arquivos objeto gerados
+OBJECTS = $(SOURCES:.cpp=.o)
+
+all: $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f $(OBJECTS) $(EXECUTABLE)
