@@ -17,32 +17,24 @@ bool InputController::setFile(string path) {
     std::cout << "Número de amostras: " << file_info.frames << std::endl;
 
     channels.resize(file_info.channels, vector<double>(BUFFER_SIZE, 0));
+    vector<double> buffer(BUFFER_SIZE*file_info.channels, 0);
+    this->buffer = buffer;
 
-    // buffer.resize(BUFFER_SIZE*file_info.channels, 0);
-    // buffer.reserve(BUFFER_SIZE*file_info.channels);
-    buffer = new vector<double>(BUFFER_SIZE*file_info.channels + 1);
 
     return true;
 }
 
-void InputController::teste() {
-    // double b[buffer.size()];
-    // for (int i=0 ; i < buffer.size() ; i++) {
-    //     b[i] = buffer[i];
-    // }
-
-    // double* b = new double[BUFFER_SIZE*file_info.channels];
-    vector<double> b(BUFFER_SIZE*file_info.channels);
-
-    while (sf_readf_double(file, buffer->data(), BUFFER_SIZE) > 0) {
-        std::cout << (*buffer)[0] << std::endl;
+bool InputController::read_file() {
+    if (sf_readf_double(file, buffer.data(), BUFFER_SIZE) > 0) {
         for (int i = 0; i < BUFFER_SIZE; i++) {
             for (int channel = 0; channel < file_info.channels; channel++) {
-                double sample = (*buffer)[i * file_info.channels + channel];
+                double sample = buffer[i * file_info.channels + channel];
                 channels[channel][i] = sample;
             }
         }
+        return true;
     }
+    return false;
 }
 
 vector<double> InputController::getChannel(int channel) {
@@ -52,7 +44,3 @@ vector<double> InputController::getChannel(int channel) {
 void InputController::close_file() {
     sf_close(file);
 }
-
-// InputController::~InputController() {
-//     delete buffer;
-// }

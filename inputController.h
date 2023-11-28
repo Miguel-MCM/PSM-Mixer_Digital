@@ -16,14 +16,12 @@ class InputController {
 
     const int BUFFER_SIZE = 4096;
     vector<vector<double>> channels;
-    vector<double> *buffer;
+    vector<double> buffer;
  public:
     bool setFile(string path);
-    void teste();
+    bool read_file();
     void close_file();
     vector<double> getChannel(int channel);
-   //  ~InputController();
-   //  InputController();
 };
 
 #endif  //  INCLUDE_INPUTCONTROLLER_H
