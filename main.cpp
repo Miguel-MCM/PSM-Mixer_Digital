@@ -1,43 +1,19 @@
 #include <iostream>
 #include <cmath>
 #include "filters.h"
+#include "inputController.h"
 
 int main() {
-    TotalFilter teste;
+    InputController input_controller;
 
-    vector<double> input(1000, 1);
-    for (int i=0; i < 1000; i++) {
-        input[i] = 2*cos(i*M_PI) + cos(i*M_PI/2);
-        // input[i] = cos(i*M_PI);
-        std::cout << input[i] << ", ";
+    string file_path = "Queen-–-Bohemian-Rhapsody-_Official-Video-Remastered_.wav";
+
+    if (!input_controller.setFile(file_path)) {
+        std::cout << "Deu Erro\n";
+        return -1;
     }
-    std::cout << "\n";
-
-    vector<double> output = teste.convolve(input);
-    // for (double x : output) {
-    //     std::cout << x <<  ", ";
-    // }
-    // std::cout << "\n";
-
-    for (int i=0; i < 1000; i++) {
-        std::cout << 2*cos(i*M_PI) << ", ";
-    }
-    std::cout << "\n";
-
-    teste.set_gain(1, -40);
-    teste.set_gain(2, -40);
-    teste.set_gain(3, -40);
-    teste.set_gain(4, -40);
-    teste.set_gain(5, -40);
-    teste.set_gain(6, -40);
-    teste.set_gain(7, -40);
-    teste.set_gain(8, -40);
-    output = teste.convolve(input);
-    for (double x : output) {
-        std::cout << x <<  ", ";
-    }
-    std::cout << "\n";
-
+    input_controller.teste();
+    input_controller.close_file();
 
     return 0;
 }
