@@ -1,10 +1,10 @@
-#ifndef INCLUDE_FILTROS_H
-#define INCLUDE_FILTROS_H
+#ifndef FILTERS_H_
+#define FILTERS_H_
 
 #include <vector>
 using std::vector;
 
-const int HALF_WINDOW_SIZE = 100;
+const int HALF_WINDOW_SIZE = 200;
 const int H_SIZE = 2*HALF_WINDOW_SIZE + 1;
 const double FREQ_AM = 44100;  // Hz
 const double FREQ_NYQUIST = FREQ_AM/2;  // Hz
@@ -41,4 +41,4 @@ class TotalFilter {
      void set_gain(int index, double db_gain);
 };
 
-#endif  //  INCLUDE_FILTROS_H
+#endif  //  FILTERS_H_

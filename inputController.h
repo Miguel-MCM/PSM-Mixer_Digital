@@ -1,5 +1,5 @@
-#ifndef INCLUDE_INPUTCONTROLLER_H
-#define INCLUDE_INPUTCONTROLLER_H
+#ifndef INPUTCONTROLLER_H_
+#define INPUTCONTROLLER_H_
 
 #include <sndfile.h>
 #include <string>
@@ -8,13 +8,14 @@
 using std::string;
 using std::vector;
 
+const int BUFFER_SIZE = 4096;
+
 class InputController {
  private:
     string file_path;
     SF_INFO file_info;
     SNDFILE *file;
 
-    const int BUFFER_SIZE = 4096;
     vector<vector<double>> channels;
     vector<double> buffer;
  public:
@@ -24,4 +25,4 @@ class InputController {
     vector<double> getChannel(int channel);
 };
 
-#endif  //  INCLUDE_INPUTCONTROLLER_H
+#endif  //  INPUTCONTROLLER_H_

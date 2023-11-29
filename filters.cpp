@@ -1,6 +1,8 @@
 #include "filters.h"
 #include <cmath>
 
+#include <iostream>
+
 const double TotalFilter::freqs1[10] = {0, 48.0, 96.0, 192.0, 384.0, 756.0, 1500.0, 3000.0, 6000.0, 12000.0};
 const double TotalFilter::freqs2[10] = {48.0, 96.0, 192.0, 384.0, 756.0, 1500.0, 3000.0, 6000.0, 12000.0, 22050.0};
 
@@ -71,10 +73,12 @@ vector<double> TotalFilter::convolve(const vector<double> &x) {
     int result_size = x_size + H_SIZE-1;
     vector<double> out(result_size, 0);
 
+
     for (int n=0; n < result_size; n++) {
         for (int m=0; m < H_SIZE; m++) {
             if (n-m >= 0 && n-m < x_size) {
                 out[n] += x[n-m] * h[m];
+                // std::cout << x[n-m] << std::endl;
             }
         }
     }
