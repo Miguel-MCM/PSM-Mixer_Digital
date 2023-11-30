@@ -1,5 +1,5 @@
 #include "outputController.h"
-// #include <iostream>
+#include <iostream>
 // #include <time.h>
 OutputController::OutputController(int num_channels, int sample_rate) {
     initialize(num_channels, sample_rate);

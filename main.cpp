@@ -3,11 +3,22 @@
 #include "./inputController.h"
 #include "./outputController.h"
 
+
 int main() {
-    const string file_input = "./Queen-–-Bohemian-Rhapsody-_Official-Video-Remastered_.wav";
+    const string file_input = "Queen – Bohemian Rhapsody (Official Video Remastered).wav";
     InputController input_controller;
     input_controller.setFile(file_input);
+    TotalFilter filter;
 
+    filter.set_gain(0, -5);
+    filter.set_gain(1, -5);
+    filter.set_gain(2, -5);
+    filter.set_gain(3, -5);
+    filter.set_gain(4, 5);
+    filter.set_gain(5, 5);
+    filter.set_gain(9, -10);
+    filter.set_gain(8, -10);
+    filter.set_gain(7, -10);
 
 
     vector<sf::Int16> test_audio(BUFFER_SIZE*2);
@@ -18,9 +29,13 @@ int main() {
     OutputController output_controller(2, 44100);
 
     input_controller.read_file();
+    vector<double> canal1 = filter.convolve(*input_channel0);
+    vector<double> canal2 = filter.convolve(*input_channel1);
+
+
     for (int i=0; i < BUFFER_SIZE; ++i) {
-            test_audio[i*2] = static_cast<sf::Int16>(32767.0*(*input_channel0)[i]);
-            test_audio[i*2+1] = static_cast<sf::Int16>(32767.0*(*input_channel1)[i]);
+            test_audio[i*2] = static_cast<sf::Int16>(32767.0*canal1[i]);
+            test_audio[i*2+1] = static_cast<sf::Int16>(32767.0*canal2[i]);
         }
 
     output_controller.appendBuffer(test_audio);
@@ -28,15 +43,21 @@ int main() {
 
 
     while (input_controller.read_file()) {
-        // std::cout << "a\n";
+        canal1 = filter.convolve(*input_channel0);
+        canal2 = filter.convolve(*input_channel1);
+
+        std::cout << output_controller.buffers.size() << " a\n";
         for (int i=0; i < BUFFER_SIZE; ++i) {
-            test_audio[i*2] = static_cast<sf::Int16>(32767.0*(*input_channel0)[i]);
-            test_audio[i*2+1] = static_cast<sf::Int16>(32767.0*(*input_channel1)[i]);
+            test_audio[i*2] = static_cast<sf::Int16>(32767.0*canal1[i]);
+            test_audio[i*2+1] = static_cast<sf::Int16>(32767.0*canal2[i]);
         }
         output_controller.appendBuffer(test_audio);
     }
+
+    std::cout << "foi o arquivo.\n";
+
     while (output_controller.getStatus() == OutputController::Playing) {
-        sf::sleep(sf::seconds(1));
+        // sf::sleep(sf::seconds(1));
     }
 
 
