@@ -8,7 +8,7 @@
 using std::string;
 using std::vector;
 
-const int BUFFER_SIZE = 4096;
+const int BUFFER_SIZE = 44100/10;
 
 class InputController {
  private:
@@ -22,7 +22,7 @@ class InputController {
     bool setFile(string path);
     bool read_file();
     void close_file();
-    vector<double> getChannel(int channel);
+    vector<double>* getChannel(int channel);
 };
 
 #endif  //  INPUTCONTROLLER_H_

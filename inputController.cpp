@@ -37,8 +37,8 @@ bool InputController::read_file() {
     return false;
 }
 
-vector<double> InputController::getChannel(int channel) {
-    return channels[channel];
+vector<double>* InputController::getChannel(int channel) {
+    return &(channels[channel]);
 }
 
 void InputController::close_file() {
