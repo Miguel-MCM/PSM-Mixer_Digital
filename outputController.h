@@ -3,50 +3,23 @@
 
 #include <vector>
 #include <SFML/Audio.hpp>
-#include <mutex>
+// #include <mutex>
+#include <list>
 
 using std::vector;
+using std::list;
 
-class MyAudioStream : public sf::SoundStream {
- public:
-    void load(sf::SoundBuffer * buffer);
-    inline void set_mutex(std::mutex *fill_buffer_mutex) {this->fill_buffer_mutex = fill_buffer_mutex;}
-    inline size_t getCurrentSample() {return m_currentSample;}
-   //  MyAudioStream();
+class OutputController : public sf::SoundStream{
  private:
-    virtual bool onGetData(Chunk& data);
-    virtual void onSeek(sf::Time timeOffset);
-    std::mutex *fill_buffer_mutex;
-    sf::SoundBuffer *buffer;
+      virtual bool onGetData(Chunk& data);
+      virtual void onSeek(sf::Time timeOffset);
 
-    vector<sf::Int16> m_samples;
-    size_t m_currentSample;
-};
-
-class OutputController {
- private:
-    int buffer_size;
-    int num_channels;
-    int sample_rate;
-    bool keep_playing = false;
-
-    vector<vector<double>> channels;
-    sf::SoundBuffer buffer;
-    MyAudioStream stream;
-    std::mutex *fill_buffer_mutex;
-
-
+      list<vector<sf::Int16>> buffers;
+      int chunk_size;
+      size_t m_currentSample;
  public:
-    inline void set_mutex(std::mutex *fill_buffer_mutex) {
-      this->fill_buffer_mutex = fill_buffer_mutex;
-      stream.set_mutex(fill_buffer_mutex);}
-    OutputController(int buffer_size, int channels, int sample_rate);
-   //  void setStream(MyAudioStream *stream);
-    void play();
-    void fillBuffer(const vector<sf::Int16> * audioData);
-    bool is_playng();
-    void finish();
-    inline size_t getCurrentSample() {return stream.getCurrentSample();}
+      OutputController(int num_channels, int sample_rate);
+      void appendBuffer(vector<sf::Int16> &buffer);
 };
 
 

@@ -8,7 +8,7 @@
 using std::string;
 using std::vector;
 
-const int BUFFER_SIZE = 44100/10;
+const int BUFFER_SIZE = 44100;
 
 class InputController {
  private:
