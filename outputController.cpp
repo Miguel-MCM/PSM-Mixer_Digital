@@ -5,6 +5,7 @@ OutputController::OutputController(int num_channels, int sample_rate) {
     initialize(num_channels, sample_rate);
     chunk_size = sample_rate/10;
     m_currentSample = 0;
+    should_pop = false;
 }
 
 void OutputController::appendBuffer(vector<sf::Int16> &buffer) {
@@ -12,6 +13,15 @@ void OutputController::appendBuffer(vector<sf::Int16> &buffer) {
 }
 
 bool OutputController::onGetData(Chunk &data) {
+    if (should_pop) {
+        buffers.pop_front();
+        should_pop = false;
+        m_currentSample = 0;
+            if (buffers.empty()) {
+                std::cout << "demoraaa\n";
+                return false;
+            }
+    }
     data.samples = &(buffers.front()[m_currentSample]);
 
     if (m_currentSample + chunk_size < buffers.front().size()) {
@@ -20,12 +30,9 @@ bool OutputController::onGetData(Chunk &data) {
         // std::cout << buffers.front().size() - m_currentSample << " b\n";
     } else {
         data.sampleCount = buffers.front().size() - m_currentSample;
-        buffers.pop_front();
-        m_currentSample = 0;
+        // buffers.pop_front();
+        should_pop = true;
 
-        if (buffers.empty()) {
-            return false;
-        }
         // std::cout << buffers.front().size() - m_currentSample << " c\n";
     }
 

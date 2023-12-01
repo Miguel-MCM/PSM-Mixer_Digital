@@ -16,6 +16,7 @@ class OutputController : public sf::SoundStream{
 
       int chunk_size;
       size_t m_currentSample;
+      bool should_pop;
  public:
       list<vector<sf::Int16>> buffers;
       OutputController(int num_channels, int sample_rate);

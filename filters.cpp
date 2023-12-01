@@ -71,13 +71,14 @@ TotalFilter::TotalFilter() : h(H_SIZE, 0) {
 vector<double> TotalFilter::convolve(const vector<double> &x) {
     int x_size = x.size();
     int result_size = x_size + H_SIZE-1;
-    vector<double> out(result_size, 0);
+    vector<double> out(x_size, 0);
 
 
-    for (int n=0; n < result_size; n++) {
+    for (int n=HALF_WINDOW_SIZE; n < x_size+HALF_WINDOW_SIZE; n++) {
+        int i = n - HALF_WINDOW_SIZE;
         for (int m=0; m < H_SIZE; m++) {
             if (n-m >= 0 && n-m < x_size) {
-                out[n] += x[n-m] * h[m];
+                out[i] += x[n-m] * h[m];
                 // std::cout << x[n-m] << std::endl;
             }
         }
