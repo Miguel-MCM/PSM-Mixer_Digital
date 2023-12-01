@@ -6,6 +6,9 @@ OutputController::OutputController(int num_channels, int sample_rate) {
     chunk_size = sample_rate/10;
     m_currentSample = 0;
     should_pop = false;
+
+    vector<sf::Int16> initial_buffer(sample_rate, 0);
+    buffers.push_back(initial_buffer);
 }
 
 void OutputController::appendBuffer(vector<sf::Int16> &buffer) {

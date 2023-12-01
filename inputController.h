@@ -22,6 +22,7 @@ class InputController {
     bool setFile(string path);
     bool read_file();
     void close_file();
+    inline SF_INFO getFileInfo() {return file_info;}
     vector<int16_t>* getChannel(int channel);
 };
 

@@ -8,6 +8,8 @@ int main() {
     const string file_input = "Queen – Bohemian Rhapsody (Official Video Remastered).wav";
     InputController input_controller;
     input_controller.setFile(file_input);
+    SF_INFO file_info = input_controller.getFileInfo();
+
     TotalFilter filter;
 
     filter.set_gain(0, 0);
@@ -15,8 +17,8 @@ int main() {
     filter.set_gain(2, 0);
     filter.set_gain(3, 0);
     filter.set_gain(4, 0);
-    filter.set_gain(5, 20);
-    filter.set_gain(6, 0);
+    filter.set_gain(5, 0);
+    filter.set_gain(6, 6);
     filter.set_gain(7, 0);
     filter.set_gain(8, 0);
     filter.set_gain(9, 0);
@@ -26,24 +28,12 @@ int main() {
 
     vector<int16_t> *input_channel0 = input_controller.getChannel(0);
     vector<int16_t> *input_channel1 = input_controller.getChannel(1);
-    // output_controller.set_mutex(&mutex);
-    OutputController output_controller(2, 44100);
 
-    input_controller.read_file();
-    vector<double> canal1 = filter.convolve(*input_channel0);
-    vector<double> canal2 = filter.convolve(*input_channel1);
+    OutputController output_controller(file_info.channels, file_info.samplerate);
 
+    vector<double> canal1;
+    vector<double> canal2;
 
-    for (int i=0; i < BUFFER_SIZE; ++i) {
-            test_audio[i*2] = static_cast<sf::Int16>(canal1[i]);
-            test_audio[i*2+1] = static_cast<sf::Int16>(canal2[i]);
-        }
-
-    output_controller.appendBuffer(test_audio);
-    output_controller.appendBuffer(test_audio);
-    output_controller.appendBuffer(test_audio);
-    output_controller.appendBuffer(test_audio);
-    output_controller.appendBuffer(test_audio);
     output_controller.play();
 
 
