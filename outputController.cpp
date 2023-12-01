@@ -6,6 +6,7 @@ OutputController::OutputController(int num_channels, int sample_rate) {
     chunk_size = sample_rate/10;
     m_currentSample = 0;
     should_pop = false;
+    buffered_samples = 0;
 
     vector<sf::Int16> initial_buffer(sample_rate, 0);
     buffers.push_back(initial_buffer);
@@ -13,6 +14,8 @@ OutputController::OutputController(int num_channels, int sample_rate) {
 
 void OutputController::appendBuffer(vector<sf::Int16> &buffer) {
     buffers.push_back(buffer);
+    std::lock_guard<std::mutex> lock(output_mutex);
+    buffered_samples += buffer.size();
 }
 
 bool OutputController::onGetData(Chunk &data) {
@@ -38,10 +41,16 @@ bool OutputController::onGetData(Chunk &data) {
 
         // std::cout << buffers.front().size() - m_currentSample << " c\n";
     }
+    std::lock_guard<std::mutex> lock(output_mutex);
+    buffered_samples -= data.sampleCount;
 
     return true;
 }
 
 void OutputController::onSeek(sf::Time timeOffset) {
     m_currentSample = static_cast<std::size_t>(timeOffset.asSeconds() * getSampleRate() * getChannelCount());
+}
+
+double OutputController::getBufferedTime() {
+    return static_cast<double>(buffered_samples) /static_cast<double>(getSampleRate());
 }
