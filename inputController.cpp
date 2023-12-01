@@ -16,8 +16,8 @@ bool InputController::setFile(string path) {
     std::cout << "Número de canais: " << file_info.channels << std::endl;
     std::cout << "Número de amostras: " << file_info.frames << std::endl;
 
-    channels.resize(file_info.channels, vector<double>(BUFFER_SIZE, 0));
-    vector<double> buffer(BUFFER_SIZE*file_info.channels, 0);
+    channels.resize(file_info.channels, vector<int16_t>(BUFFER_SIZE, 0));
+    vector<int16_t> buffer(BUFFER_SIZE*file_info.channels, 0);
     this->buffer = buffer;
 
 
@@ -25,10 +25,10 @@ bool InputController::setFile(string path) {
 }
 
 bool InputController::read_file() {
-    if (sf_readf_double(file, buffer.data(), BUFFER_SIZE) > 0) {
+    if (sf_readf_short(file, buffer.data(), BUFFER_SIZE) > 0) {
         for (int i = 0; i < BUFFER_SIZE; i++) {
             for (int channel = 0; channel < file_info.channels; channel++) {
-                double sample = buffer[i * file_info.channels + channel];
+                int16_t sample = buffer[i * file_info.channels + channel];
                 channels[channel][i] = sample;
             }
         }
@@ -37,7 +37,7 @@ bool InputController::read_file() {
     return false;
 }
 
-vector<double>* InputController::getChannel(int channel) {
+vector<int16_t>* InputController::getChannel(int channel) {
     return &(channels[channel]);
 }
 

@@ -2,6 +2,7 @@
 #define FILTERS_H_
 
 #include <vector>
+#include <cmath>
 using std::vector;
 
 const int HALF_WINDOW_SIZE = 200;
@@ -37,7 +38,7 @@ class TotalFilter {
 
  public:
      TotalFilter();
-     vector<double> convolve(const vector<double> &x);
+     vector<double> convolve(const vector<int16_t> &x);
      void set_gain(int index, double db_gain);
 };
 

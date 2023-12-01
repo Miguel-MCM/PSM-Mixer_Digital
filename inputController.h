@@ -16,13 +16,13 @@ class InputController {
     SF_INFO file_info;
     SNDFILE *file;
 
-    vector<vector<double>> channels;
-    vector<double> buffer;
+    vector<vector<int16_t>> channels;
+    vector<int16_t> buffer;
  public:
     bool setFile(string path);
     bool read_file();
     void close_file();
-    vector<double>* getChannel(int channel);
+    vector<int16_t>* getChannel(int channel);
 };
 
 #endif  //  INPUTCONTROLLER_H_

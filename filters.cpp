@@ -1,5 +1,4 @@
 #include "filters.h"
-#include <cmath>
 
 #include <iostream>
 
@@ -68,7 +67,7 @@ TotalFilter::TotalFilter() : h(H_SIZE, 0) {
 }
 
 
-vector<double> TotalFilter::convolve(const vector<double> &x) {
+vector<double> TotalFilter::convolve(const vector<int16_t> &x) {
     int x_size = x.size();
     int result_size = x_size + H_SIZE-1;
     vector<double> out(x_size, 0);
@@ -79,7 +78,11 @@ vector<double> TotalFilter::convolve(const vector<double> &x) {
         for (int m=0; m < H_SIZE; m++) {
             if (n-m >= 0 && n-m < x_size) {
                 out[i] += x[n-m] * h[m];
-                // std::cout << x[n-m] << std::endl;
+            }
+            if (out[i] > INT16_MAX) {
+                out[i] = INT16_MAX;
+            } else if (out[i] < INT16_MIN) {
+                out[i] = INT16_MIN;
             }
         }
     }

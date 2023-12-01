@@ -15,7 +15,7 @@ int main() {
     filter.set_gain(2, 0);
     filter.set_gain(3, 0);
     filter.set_gain(4, 0);
-    filter.set_gain(5, 0);
+    filter.set_gain(5, 20);
     filter.set_gain(6, 0);
     filter.set_gain(7, 0);
     filter.set_gain(8, 0);
@@ -24,8 +24,8 @@ int main() {
 
     vector<sf::Int16> test_audio(BUFFER_SIZE*2);
 
-    vector<double> *input_channel0 = input_controller.getChannel(0);
-    vector<double> *input_channel1 = input_controller.getChannel(1);
+    vector<int16_t> *input_channel0 = input_controller.getChannel(0);
+    vector<int16_t> *input_channel1 = input_controller.getChannel(1);
     // output_controller.set_mutex(&mutex);
     OutputController output_controller(2, 44100);
 
@@ -35,8 +35,8 @@ int main() {
 
 
     for (int i=0; i < BUFFER_SIZE; ++i) {
-            test_audio[i*2] = static_cast<sf::Int16>(32767.0*canal1[i]);
-            test_audio[i*2+1] = static_cast<sf::Int16>(32767.0*canal2[i]);
+            test_audio[i*2] = static_cast<sf::Int16>(canal1[i]);
+            test_audio[i*2+1] = static_cast<sf::Int16>(canal2[i]);
         }
 
     output_controller.appendBuffer(test_audio);
@@ -53,8 +53,8 @@ int main() {
 
         std::cout << output_controller.buffers.size() << " a\n";
         for (int i=0; i < BUFFER_SIZE; ++i) {
-            test_audio[i*2] = static_cast<sf::Int16>(32767.0*canal1[i]);
-            test_audio[i*2+1] = static_cast<sf::Int16>(32767.0*canal2[i]);
+            test_audio[i*2] = static_cast<sf::Int16>(canal1[i]);
+            test_audio[i*2+1] = static_cast<sf::Int16>(canal2[i]);
         }
         output_controller.appendBuffer(test_audio);
     }
