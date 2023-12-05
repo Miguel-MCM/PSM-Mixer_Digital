@@ -10,20 +10,19 @@ bool continue_spectro = true;
 std::mutex espectro_mutex;
 
 
-void show_spectro(vector<int> *buffer, int *num_buffers) {
-    EspectroBarras espectro;
+void show_spectro(EspectroBarras *espectro) {
     while (continue_spectro) {
+        // std::cout << espectro->barras.size() << "\n";
         sf::sleep(sf::seconds(1));
+
+        espectro->absDFT();
+
+        std::cout << espectro->show() << std::endl;
+
         std::lock_guard<std::mutex> lock(espectro_mutex);
-
-        // espectro.absDFT(*buffer, static_cast<double>(1) / (*num_buffers * static_cast<double>(INT16_MAX)));
-        espectro.absDFT(*buffer, 1);
-
-        std::cout << espectro.show() << std::endl;
-
-        // std::fill(buffer->begin(), buffer->end(), 0);
-        buffer->clear();
-        *num_buffers = 0;
+        for (int i=0; i < BUFFER_SIZE; i++) {
+            espectro->input[i][0] = 0;
+        }
     }
 }
 
@@ -35,15 +34,15 @@ int main() {
 
     TotalFilter filter;
 
-    filter.set_gain(0, 0);
-    filter.set_gain(1, 0);
-    filter.set_gain(2, 0);
-    filter.set_gain(3, 0);
-    filter.set_gain(4, 0);
-    filter.set_gain(5, 0);
-    filter.set_gain(6, 0);
-    filter.set_gain(7, 0);
-    filter.set_gain(8, 0);
+    filter.set_gain(0, -20);
+    filter.set_gain(1, -20);
+    filter.set_gain(2, -20);
+    filter.set_gain(3, -20);
+    filter.set_gain(4, -20);
+    filter.set_gain(5, 20);
+    filter.set_gain(6, -20);
+    filter.set_gain(7, -20);
+    filter.set_gain(8, -10);
     filter.set_gain(9, 0);
 
 
@@ -59,10 +58,10 @@ int main() {
 
     output_controller.play();
 
-    vector<int> espectro_buffer;
-    int num_buffers_spectro = 0;
+    const int N_ESPECTRO = BUFFER_SIZE;
+    EspectroBarras espectro(N_ESPECTRO);
 
-    std::thread espectro_thread(show_spectro, &espectro_buffer, &num_buffers_spectro);
+    std::thread espectro_thread(show_spectro, &espectro);
 
     while (input_controller.read_file()) {
         while (output_controller.getBufferedTime() > 1 && output_controller.getStatus() == OutputController::Playing) { }
@@ -76,10 +75,11 @@ int main() {
             test_audio[i*2+1] = static_cast<sf::Int16>(canal2[i]);
         }
         std::lock_guard<std::mutex> lock(espectro_mutex);
-        for (int i=0; i < test_audio.size(); i++) {
-            espectro_buffer.push_back(test_audio[i]);
+        for (int i=0; i < BUFFER_SIZE; i++) {
+            espectro.input[i][0] += static_cast<double>(canal1[i]) / INT16_MAX;
+            espectro.input[i][0] += static_cast<double>(canal2[i]) / INT16_MAX;
+            // espectro.input[i][0] /= INT16_MAX*2;
         }
-        num_buffers_spectro ++;
 
         output_controller.appendBuffer(test_audio);
     }

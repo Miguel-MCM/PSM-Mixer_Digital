@@ -40,6 +40,7 @@ class TotalFilter {
      TotalFilter();
      vector<double> convolve(const vector<int16_t> &x);
      void set_gain(int index, double db_gain);
+     ~TotalFilter();
 };
 
 #endif  //  FILTERS_H_

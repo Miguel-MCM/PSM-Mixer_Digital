@@ -9,7 +9,7 @@ void BandPass::calculate_h() {
     for (int i=0; i < H_SIZE; i++) {
         int n = i-HALF_WINDOW_SIZE;
         if (n)
-            h[i] += gain * (sin(w2*n)-sin(w1*n))/(n*M_PI) * hamming_window(n);
+            h[i] = gain * (sin(w2*n)-sin(w1*n))/(n*M_PI) * hamming_window(n);
         else
             h[i] = gain*(w2-w1)/M_PI * hamming_window(n);
     }
@@ -92,4 +92,10 @@ vector<double> TotalFilter::convolve(const vector<int16_t> &x) {
 void TotalFilter::set_gain(int index, double db_gain) {
     filters[index]->set_db_gain(db_gain);
     calculate_h();
+}
+
+TotalFilter::~TotalFilter() {
+    for (int i=0 ; i < NUM_FILTERS; i++) {
+        delete filters[i];
+    }
 }
