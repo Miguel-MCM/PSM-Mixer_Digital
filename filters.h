@@ -5,7 +5,7 @@
 #include <cmath>
 using std::vector;
 
-const int HALF_WINDOW_SIZE = 200;
+const int HALF_WINDOW_SIZE = 250;
 const int H_SIZE = 2*HALF_WINDOW_SIZE + 1;
 const double FREQ_AM = 44100;  // Hz
 const double FREQ_NYQUIST = FREQ_AM/2;  // Hz

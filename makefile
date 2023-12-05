@@ -8,10 +8,10 @@ CC = g++
 CFLAGS = -std=c++11 -Wall
 
 # Flags do linker
-LDFLAGS = -lsndfile -lm -lsfml-audio -lsfml-system
+LDFLAGS = -lsndfile -lm -lsfml-audio -lsfml-system -pthread
 
 # Arquivos fonte
-SOURCES = main.cpp filters.cpp inputController.cpp outputController.cpp
+SOURCES = main.cpp filters.cpp inputController.cpp outputController.cpp espectroBarras.cpp
 
 # Arquivos objeto gerados
 OBJECTS = $(SOURCES:.cpp=.o)
