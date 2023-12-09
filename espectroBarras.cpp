@@ -1,7 +1,5 @@
 #include "espectroBarras.h"
 
-#include <iostream>
-
 const double EspectroBarras::freqs[10] = {32.0, 64.0, 128.0, 256.0, 512.0, 1024.0, 2048.0, 4096.0, 8192.0, 16384.0};
 const double EspectroBarras::freqs1[10] = {0, 48.0, 96.0, 192.0, 384.0, 756.0, 1500.0, 3000.0, 6000.0, 12000.0};
 const double EspectroBarras::freqs2[10] = {48.0, 96.0, 192.0, 384.0, 756.0, 1500.0, 3000.0, 6000.0, 12000.0, 22050.0};
@@ -25,14 +23,13 @@ vector<double> EspectroBarras::absDFT() {
         amp_media /= final_k - initial_k;
         barras[i] = amp_media;
     }
-    std::cout << "\n";
 
     return barras;
 }
 
 string EspectroBarras::show() {
     const int MAX = 8;
-    const string BARRA = "▆";
+    const string BARRA = "#";
 
     string out = "";
     for (int i=0; i < MAX; i++) {
@@ -48,10 +45,6 @@ string EspectroBarras::show() {
 
     out += "\n";
     out += "0\t1\t2\t3\t4\t5\t6\t7\t8\t9\n";
-
-    for (double &e : barras) {
-        out += std::to_string(e) + "\t";
-    }
 
     return out;
 }

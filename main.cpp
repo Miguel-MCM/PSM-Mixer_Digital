@@ -102,18 +102,6 @@ int main(int argc, char* agrv[]) {
 
     TotalFilter filter;
 
-    filter.set_gain(0, 0);
-    filter.set_gain(1, 0);
-    filter.set_gain(2, 0);
-    filter.set_gain(3, 0);
-    filter.set_gain(4, 0);
-    filter.set_gain(5, 0);
-    filter.set_gain(6, 0);
-    filter.set_gain(7, 0);
-    filter.set_gain(8, 0);
-    filter.set_gain(9, 0);
-
-
     vector<sf::Int16> output(BUFFER_SIZE*file_info.channels);
 
     vector<vector<int16_t>*> input_channels(file_info.channels);
