@@ -1,5 +1,8 @@
 *.o
 main
-calculos.py
+*.py
 .vscode
 *.wav
+plots
+*.txt
+logs

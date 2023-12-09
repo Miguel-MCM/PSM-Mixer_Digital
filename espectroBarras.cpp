@@ -34,7 +34,7 @@ string EspectroBarras::show() {
     string out = "";
     for (int i=0; i < MAX; i++) {
         for (double &e : barras) {
-            if (e >= exp10(-i/1.5)) {
+            if (e >= exp10(-i*12/20)) {
                 out += BARRA + "\t";
             } else {
                 out += "  \t";

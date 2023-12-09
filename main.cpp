@@ -24,7 +24,7 @@ void show_spectro(EspectroBarras *espectro) {
     text.setFont(font);
     text.setCharacterSize(24);
 
-    text.setFillColor(sf::Color::White);
+    text.setFillColor(sf::Color::Green);
 
     text.setString(espectro->show());
 
