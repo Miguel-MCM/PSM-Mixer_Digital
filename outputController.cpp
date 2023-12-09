@@ -1,6 +1,5 @@
 #include "outputController.h"
-#include <iostream>
-// #include <time.h>
+
 OutputController::OutputController(int num_channels, int sample_rate) {
     initialize(num_channels, sample_rate);
     chunk_size = sample_rate/10;
@@ -24,7 +23,7 @@ bool OutputController::onGetData(Chunk &data) {
         should_pop = false;
         m_currentSample = 0;
             if (buffers.empty()) {
-                std::cout << "demoraaa\n";
+                data.sampleCount = 0;
                 return false;
             }
     }
@@ -33,13 +32,9 @@ bool OutputController::onGetData(Chunk &data) {
     if (m_currentSample + chunk_size < buffers.front().size()) {
         data.sampleCount = chunk_size;
         m_currentSample += chunk_size;
-        // std::cout << buffers.front().size() - m_currentSample << " b\n";
     } else {
         data.sampleCount = buffers.front().size() - m_currentSample;
-        // buffers.pop_front();
         should_pop = true;
-
-        // std::cout << buffers.front().size() - m_currentSample << " c\n";
     }
     std::lock_guard<std::mutex> lock(output_mutex);
     buffered_samples -= data.sampleCount;
