@@ -5,10 +5,10 @@ EXECUTABLE = main
 CC = g++
 
 # Flags de compilação
-CFLAGS = -std=c++11 -Wall
+CFLAGS = -std=c++11 -Wall -O
 
 # Flags do linker
-LDFLAGS = -lsndfile -lm -lsfml-audio -lsfml-system -pthread -lfftw3
+LDFLAGS = -lsndfile -lm -lsfml-audio -lsfml-system -lsfml-graphics -lsfml-window -pthread -lfftw3
 
 # Arquivos fonte
 SOURCES = main.cpp filters.cpp inputController.cpp outputController.cpp espectroBarras.cpp
