@@ -1,9 +1,5 @@
 #include "inputController.h"
 
-#include <iostream>
-
-
-
 bool InputController::setFile(string path) {
     file_path = path;
     file = sf_open(file_path.c_str(), SFM_READ, &file_info);
@@ -12,14 +8,9 @@ bool InputController::setFile(string path) {
         return false;
     }
 
-    std::cout << "Taxa de amostragem: " << file_info.samplerate << " Hz" << std::endl;
-    std::cout << "Número de canais: " << file_info.channels << std::endl;
-    std::cout << "Número de amostras: " << file_info.frames << std::endl;
-
     channels.resize(file_info.channels, vector<int16_t>(BUFFER_SIZE, 0));
     vector<int16_t> buffer(BUFFER_SIZE*file_info.channels, 0);
     this->buffer = buffer;
-
 
     return true;
 }
