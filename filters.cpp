@@ -1,6 +1,5 @@
 #include "filters.h"
-
-#include <iostream>
+#include <cstdint>
 
 const double TotalFilter::freqs1[10] = {0, 48.0, 96.0, 192.0, 384.0, 756.0, 1500.0, 3000.0, 6000.0, 12000.0};
 const double TotalFilter::freqs2[10] = {48.0, 96.0, 192.0, 384.0, 756.0, 1500.0, 3000.0, 6000.0, 12000.0, 22050.0};
@@ -98,4 +97,12 @@ TotalFilter::~TotalFilter() {
     for (int i=0 ; i < NUM_FILTERS; i++) {
         delete filters[i];
     }
+}
+
+vector<double> TotalFilter::get_db_gains() {
+    vector<double> out(NUM_FILTERS);
+    for (int i=0; i < NUM_FILTERS; i++) {
+        out[i] = filters[i]->get_db_gain();
+    }
+    return out;
 }

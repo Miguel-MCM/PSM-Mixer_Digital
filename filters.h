@@ -23,6 +23,7 @@ class BandPass {
      BandPass(double freq1, double freq2, double db_gain);
      const vector<double> get_h();
      void set_db_gain(double new_gain);
+     inline double get_db_gain() {return db_gain;}
 };
 
 class TotalFilter {
@@ -40,6 +41,7 @@ class TotalFilter {
      TotalFilter();
      vector<double> convolve(const vector<int16_t> &x);
      void set_gain(int index, double db_gain);
+     vector<double> get_db_gains();
      ~TotalFilter();
 };
 
