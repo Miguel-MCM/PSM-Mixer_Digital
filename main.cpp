@@ -123,9 +123,10 @@ int main(int argc, char* agrv[]) {
     std::thread select_gains_thread(select_gains, &filter);
 
     while (input_controller.read_file()) {
-        while (output_controller.getBufferedTime() > 1 && output_controller.getStatus() == OutputController::Playing) { }
+        while (output_controller.getBufferedTime() > 1 &&
+            output_controller.getStatus() == OutputController::Playing) { }
 
-        std::lock_guard<std::mutex> show_espectro_lock(select_gains_mutex);
+        std::lock_guard<std::mutex> select_gains_lock(select_gains_mutex);
         for (int i=0; i < file_info.channels; i++) {
             channels[i] = filter.convolve(*input_channels[i]);
         }
@@ -135,7 +136,7 @@ int main(int argc, char* agrv[]) {
                 output[i*file_info.channels + j] = static_cast<sf::Int16>(channels[j][i]);
             }
         }
-        std::lock_guard<std::mutex> select_gains_lock(espectro_mutex);
+        std::lock_guard<std::mutex> show_espectro_lock(espectro_mutex);
         for (int i=0; i < BUFFER_SIZE; i++) {
             for (const vector<double> &channel : channels) {
                 espectro.input[i][0] += static_cast<double>(channel[i]/INT16_MAX);
